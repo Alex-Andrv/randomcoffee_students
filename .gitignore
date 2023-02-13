@@ -1,0 +1,8 @@
+/app/configs/bot.ini
+/app/configs/bot_docker.ini
+/database/redis/data/
+/database/postgres/data/
+/database/redis/config/
+.ides/*
+/logs/
+/docker-compose.yml

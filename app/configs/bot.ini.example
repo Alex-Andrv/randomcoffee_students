@@ -1,0 +1,25 @@
+[random_coffee_bot]
+token =
+
+[db]
+user =
+password =
+database = randomcoffeedb_students
+host =
+port = 5432
+
+[redis]
+redis_host =
+redis_port = 6379
+redis_dp = 5
+redis_password =
+
+[alarm_bot]
+token =
+chat_id =
+
+[email]
+mail_login = itmocoffee@gmail.com
+mail_password =
+smtp_server = smtp.gmail.com
+smtp_port = 587
