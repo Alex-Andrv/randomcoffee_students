@@ -11,6 +11,7 @@ from app.tgbot.handlers.registration.registration_keyboard import name_buttons, 
 from app.tgbot.models.MyUser import MyUserBuilder, MyUser, Direction, Sex, Course
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
+from app.tgbot.utils.Validate import Validate
 from app.tgbot.utils.message_loader import messages
 from app.tgbot.utils.state_access_wrapper import set_attr_to_state, get_attr_from_state
 
@@ -51,10 +52,9 @@ async def ask_for_name(message: types.Message, bot_service: BotService, state: F
 @logging_decorator
 async def set_full_name(message: types.Message, bot_service: BotService, state: FSMContext):
     full_name: str = message.text.strip()
-    if len(full_name) > 500:
-        await logger.print_warning("full_name len is bigger than 500")
+    if not Validate.validate_full_name(full_name):
         await message.answer(messages['3.1.1.1'])
-        return await message.answer(messages['3.1.1'])
+        return await ask_for_name(messages, bot_service, state)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
     check_type("user_builder", user_builder, MyUserBuilder)
     user_builder.set_full_name(full_name)
@@ -229,10 +229,9 @@ async def ask_for_info(message: types.Message, bot_service: BotService):
 @logging_decorator
 async def read_info(message: types.Message, bot_service: BotService, state: FSMContext):
     user_info: str = message.text.strip()
-    if len(user_info) > 2000:
-        await logger.print_warning("user_info len is bigger than 2000")
+    if not Validate.validate_user_info(user_info):
         await message.answer(messages['3.11.1.1'])
-        return await message.answer(messages['3.11.1'])
+        return await ask_for_info(message, bot_service)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
     check_type("user_builder", user_builder, MyUserBuilder)
     user_builder.set_user_info(user_info)
