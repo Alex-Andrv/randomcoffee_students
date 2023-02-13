@@ -9,7 +9,7 @@ logging_decorator = logging_decorator_factory(logger)
 
 class Validate:
     @staticmethod
-    def validate_full_name(full_name: str) -> bool:
+    async def validate_full_name(full_name: str) -> bool:
         if len(full_name) > 100:
             await logger.print_warning("full_name len is bigger than 100")
             return False
@@ -23,7 +23,7 @@ class Validate:
         return True
 
     @staticmethod
-    def validate_user_info(user_info: str) -> bool:
+    async def validate_user_info(user_info: str) -> bool:
         if len(user_info) > 1000:
             await logger.print_warning("user_info len is bigger than 1000")
             return False
