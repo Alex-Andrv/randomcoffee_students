@@ -3,6 +3,6 @@
 /database/redis/data/
 /database/postgres/data/
 /database/redis/config/
-.ides/*
+.idea/*
 /logs/
 /docker-compose.yml
