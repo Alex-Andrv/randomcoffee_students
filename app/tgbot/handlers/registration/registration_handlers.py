@@ -52,9 +52,9 @@ async def ask_for_name(message: types.Message, bot_service: BotService, state: F
 @logging_decorator
 async def set_full_name(message: types.Message, bot_service: BotService, state: FSMContext):
     full_name: str = message.text.strip()
-    if not Validate.validate_full_name(full_name):
+    if not await Validate.validate_full_name(full_name):
         await message.answer(messages['3.1.1.1'])
-        return await ask_for_name(messages, bot_service, state)
+        return await ask_for_name(message, bot_service, state)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
     check_type("user_builder", user_builder, MyUserBuilder)
     user_builder.set_full_name(full_name)
@@ -229,7 +229,7 @@ async def ask_for_info(message: types.Message, bot_service: BotService):
 @logging_decorator
 async def read_info(message: types.Message, bot_service: BotService, state: FSMContext):
     user_info: str = message.text.strip()
-    if not Validate.validate_user_info(user_info):
+    if not await Validate.validate_user_info(user_info):
         await message.answer(messages['3.11.1.1'])
         return await ask_for_info(message, bot_service)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
