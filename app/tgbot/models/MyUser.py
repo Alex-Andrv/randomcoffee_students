@@ -68,6 +68,7 @@ class MyUser:
     course: Course
     # interest: list[Interest]
     user_info: str
+    ban: bool
 
 
 class MyUserBuilder:
@@ -79,6 +80,7 @@ class MyUserBuilder:
     direction: Direction | None = None
     course: Course | None = None
     user_info: str | None = None
+    ban: bool = False
 
     @typechecked
     def set_t_user_id(self, t_user_id: int) -> Self:
@@ -126,20 +128,23 @@ class MyUserBuilder:
         return self
 
     @typechecked
+    def set_ban(self, ban: bool) -> Self:
+        self.ban = ban
+        return self
+
+    @typechecked
     def to_user(self) -> MyUser:
         if not (self.t_user_id and self.email and
                 self.full_name and self.sex and
                 self.user_name and self.direction and
-                self.course and
-                # self.interest and
-                self.user_info):
+                self.course and self.user_info):
             raise UserBuilderConvertError("Can't convert builder to user, because builder contain not set value")
         return MyUser(self.t_user_id, self.email,
                       self.full_name, self.sex,
                       self.user_name, self.direction,
                       self.course,
                       # self.interest,
-                      self.user_info)
+                      self.user_info, self.ban)
 
     @staticmethod
     @typechecked
@@ -152,7 +157,8 @@ class MyUserBuilder:
             .set_user_name(my_user.user_name) \
             .set_direction(my_user.direction) \
             .set_course(my_user.course) \
-            .set_user_info(my_user.user_info)
+            .set_user_info(my_user.user_info) \
+            .set_ban(my_user.ban)
         # .set_interest(my_user.interest)
 
     def to_dict(self) -> dict[str, Any]:
@@ -164,7 +170,8 @@ class MyUserBuilder:
             'user_name': self.user_name,
             'direction': self.direction,
             'course': self.course,
-            'user_info': self.user_info
+            'user_info': self.user_info,
+            'ban': self.ban
         }
 
     @staticmethod
@@ -181,6 +188,7 @@ class MyUserBuilder:
         check_type('direction', message['direction'], str | None)
         check_type('course', message['course'], str | None)
         check_type('user_info', message['user_info'], str | None)
+        check_type('ban', message['ban'], bool)
 
         my_builder: MyUserBuilder = MyUserBuilder()
 
@@ -215,5 +223,8 @@ class MyUserBuilder:
         user_info: str | None = typing.cast(str | None, message['user_info'])
         if user_info:
             my_builder.set_user_info(user_info)
+
+        ban: bool = typing.cast(bool, message['ban'])
+        my_builder.set_ban(ban)
 
         return my_builder

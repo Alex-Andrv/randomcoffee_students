@@ -4,7 +4,7 @@ from app.tgbot.handlers.suggestions_button.suggestions_handlers import send_sugg
     read_suggestion, SuggestionStates
 
 
-async def register_suggestion_button(dp: Dispatcher):
+def register_suggestion_button(dp: Dispatcher):
     dp.register_message_handler(
         read_suggestion,
         state=SuggestionStates.reading_suggestion, is_user_have_username=True)

@@ -5,12 +5,14 @@ import asyncpg
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
 from aiogram.types import ContentTypes
+from asyncpg import Connection
 
 from app.configs.general_bot_config import REDIS_HOST, REDIS_PORT, REDIS_DP, REDIS_PASSWORD, DB_USER, \
     DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, BOT_TOKEN
 from app.configs.log_config import LOG_LEVEL, LOG_FILENAME, LOG_FILEMODE, LOG_FORMAT
 from app.tgbot.filters.is_user_have_username import IsUsernameMissingFilter
 from app.tgbot.handlers.approve.approve_register import register_approve
+from app.tgbot.handlers.ban.ban_register import register_user_ban
 from app.tgbot.handlers.email.email_register import register_email
 from app.tgbot.handlers.error.error_handler import exception_handler
 from app.tgbot.handlers.feedback.feedback_register import register_feedback
@@ -23,6 +25,7 @@ from app.tgbot.handlers.suggestions_button.suggestion_register import register_s
 from app.tgbot.handlers.unexpected_user_behavior.unexpected_user_behavior import \
     unexpected_user_behavior_message_handler, unexpected_user_behavior_callback_handler
 from app.tgbot.handlers.user_have_not_username.user_have_not_username_register import register_user_have_not_username
+from app.tgbot.middlewares.BanUser import BanUserMiddleware
 from app.tgbot.middlewares.Barrier import BarrierPre, BarrierPost
 from app.tgbot.middlewares.DependencyInjection import DependencyInjection
 from app.tgbot.middlewares.RemovePreviousButtons import RemovePreviousButtons
@@ -51,10 +54,20 @@ def create_storage():
     return RedisStorage2(REDIS_HOST, REDIS_PORT, db=REDIS_DP, password=REDIS_PASSWORD, pool_size=10)
 
 
+async def make_migration():
+    connect: Connection = await asyncpg.connect(
+        dsn=f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}')
+    migration = open("./app/migration/migration.sql", "r").read()
+    await connect.execute(migration)
+    await connect.close()
+
+
 storage = create_storage()
 
 
 async def run():
+    await make_migration()
+
     # Создаем бота и диспетчер
     bot = Bot(token=BOT_TOKEN)
 
@@ -71,12 +84,14 @@ async def run():
     dp.middleware.setup(Throttling())
     dp.middleware.setup(RemovePreviousButtons(dp))
     dp.middleware.setup(DependencyInjection(await create_pool()))
-    dp.middleware.setup(UpdateUsernameMiddleware(dp))
+    dp.middleware.setup(BanUserMiddleware())
+    dp.middleware.setup(UpdateUsernameMiddleware())
     dp.middleware.setup(BarrierPost(dp))
 
     # order matters
     # suggestion first to bypass text input handlers
-    await register_suggestion_button(dp)
+    register_suggestion_button(dp)
+    register_user_ban(dp)
     register_start(dp)
     register_user_have_not_username(dp)
     register_email(dp)

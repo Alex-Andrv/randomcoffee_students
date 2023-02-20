@@ -229,7 +229,7 @@ async def ask_for_info(message: types.Message, bot_service: BotService):
 @logging_decorator
 async def read_info(message: types.Message, bot_service: BotService, state: FSMContext):
     user_info: str = message.text.strip()
-    if not await Validate.validate_user_info(user_info):
+    if not await Validate.validate_text(user_info):
         await message.answer(messages['3.11.1.1'])
         return await ask_for_info(message, bot_service)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
@@ -270,4 +270,10 @@ async def exit_registration(bot: Bot, state: FSMContext, bot_service: BotService
                                course=my_user.course.value,
                                info=my_user.user_info),
                            parse_mode='Markdown')
+    await logger.change_user_info(messages['3.12'].format(
+                               name=my_user.full_name,
+                               sex=my_user.sex.value,
+                               direction=my_user.direction.value,
+                               course=my_user.course.value,
+                               info=my_user.user_info))
     return await ask_start_conversation(bot)

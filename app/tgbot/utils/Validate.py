@@ -23,14 +23,14 @@ class Validate:
         return True
 
     @staticmethod
-    async def validate_user_info(user_info: str) -> bool:
-        if len(user_info) > 1000:
+    async def validate_text(text: str) -> bool:
+        if len(text) > 1000:
             await logger.print_warning("user_info len is bigger than 1000")
             return False
 
-        _user_info_regex = re.compile(r'^[А-Яа-я ,.!?]+$')
+        _text_regex = re.compile(r'^[А-Яа-я ,.!?]+$')
 
-        if re.match(_user_info_regex, user_info) is None:
+        if re.match(_text_regex, text) is None:
             await logger.print_warning("user_info contains not valid simbols")
             return False
 

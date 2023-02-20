@@ -17,5 +17,5 @@ WORKDIR /itmo_coffee_project
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev
 
-CMD ["python", "-m", "app"]
+CMD sleep 15 && python -m app
 

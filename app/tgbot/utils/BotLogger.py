@@ -63,6 +63,17 @@ class BotLogger(logging.LoggerAdapter):
         t_user_id: {t_user_id}
         """)
 
+    async def change_user_info(self, text):
+        user: User = User.get_current()
+        user_name: str = user.username
+        t_user_id: int = user.id
+        await self.alarm_bot.send_message(CHAT_ID_ALARM,
+                                          f"""
+           Пользователь изменил информацию о себе: {text} \n 
+           user: {user_name}
+           t_user_id: {t_user_id}
+           """)
+
     def __del__(self):
         asyncio.run(self.alarm_bot.close())
 

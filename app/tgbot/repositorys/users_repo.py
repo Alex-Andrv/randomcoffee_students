@@ -17,6 +17,7 @@ def _get_my_user(user: Record) -> MyUser | None:
     check_type('direction', Direction(user['direction']), Direction)
     check_type('course', Course(user['course']), Course)
     check_type('user_info', user['user_info'], str)
+    check_type('ban', user['ban'], bool)
     return MyUser(t_user_id=user['t_user_id'],
                   email=user['email'],
                   full_name=user['full_name'],
@@ -24,7 +25,8 @@ def _get_my_user(user: Record) -> MyUser | None:
                   user_name=user['user_name'],
                   direction=Direction(user['direction']),
                   course=Course(user['course']),
-                  user_info=user['user_info'])
+                  user_info=user['user_info'],
+                  ban=user['ban'])
 
 
 def _get_my_users(users: list[Record]) -> List[MyUser]:
