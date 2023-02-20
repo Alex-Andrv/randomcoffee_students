@@ -28,7 +28,7 @@ class Validate:
             await logger.print_warning("user_info len is bigger than 1000")
             return False
 
-        _text_regex = re.compile(r'^[А-Яа-я ,.!?]+$')
+        _text_regex = re.compile(r'^[А-Яа-яA-Za-z ,.!@?]+$')
 
         if re.match(_text_regex, text) is None:
             await logger.print_warning("user_info contains not valid simbols")

@@ -9,6 +9,7 @@ from app.tgbot.handlers.ready.ready_handlers import ask_start_conversation
 from app.tgbot.models.Feedback import FeedbackBuilder
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
+from app.tgbot.utils.Validate import Validate
 from app.tgbot.utils.message_loader import messages
 from app.tgbot.utils.state_access_wrapper import get_attr_from_state
 
@@ -131,9 +132,14 @@ async def proceed_to_describing_problem(callback: types.CallbackQuery):
 
 @logging_decorator
 async def read_bot_problem(message: types.Message, state: FSMContext, bot_service: BotService):
+    if not await Validate.validate_text(message.text):
+        await message.answer(messages['3.11.1.1'])
+        await FeedbackStates.finding_problem.set()
+        await logger.print_info(f'user {message.from_user.id} wants to send a problem')
+        return await message.answer(messages['7.16'], reply_markup=feedback_problem_buttons)
+
     t_user_id = User.get_current().id
     await logger.print_dev(f'writing to db: bot problem: {message.text}')
-
     meeting_id = await get_attr_from_state(state, 'meeting_id')
     feedback_builder: FeedbackBuilder = FeedbackBuilder() \
         .set_cancellation_reason('(!) bot problem: ' + message.text) \
@@ -148,6 +154,12 @@ async def read_bot_problem(message: types.Message, state: FSMContext, bot_servic
 
 @logging_decorator
 async def read_other_problem(message: types.Message, state: FSMContext, bot_service: BotService):
+    if not await Validate.validate_text(message.text):
+        await message.answer(messages['3.11.1.1'])
+        await FeedbackStates.finding_problem.set()
+        await logger.print_info(f'user {message.from_user.id} wants to send a problem')
+        return await message.answer(messages['7.16'], reply_markup=feedback_problem_buttons)
+
     t_user_id = User.get_current().id
     await logger.print_dev(f'writing to db: other problem: {message.text}')
     meeting_id = await get_attr_from_state(state, 'meeting_id')
