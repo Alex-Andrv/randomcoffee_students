@@ -18,6 +18,7 @@ BOT_TOKEN = config['random_coffee_bot']['token']
 ALARM_BOT_TOKEN = config['alarm_bot']['token']
 
 CHAT_ID_ALARM = config['alarm_bot']['chat_id']
+CHAT_ID_ALARM_WITH_HR = config['alarm_bot']['chat_id_with_HR']
 
 MAIL_LOGIN = config['email']['mail_login']
 MAIL_PASSWORD = config['email']['mail_password']

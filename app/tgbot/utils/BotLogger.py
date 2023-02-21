@@ -9,7 +9,7 @@ from aiogram.dispatcher import FSMContext
 # Создаем бота для алярмов
 from aiogram.types import User
 
-from app.configs.general_bot_config import ALARM_BOT_TOKEN, CHAT_ID_ALARM
+from app.configs.general_bot_config import ALARM_BOT_TOKEN, CHAT_ID_ALARM, CHAT_ID_ALARM_WITH_HR
 
 
 class BotLogger(logging.LoggerAdapter):
@@ -67,7 +67,7 @@ class BotLogger(logging.LoggerAdapter):
         user: User = User.get_current()
         user_name: str = user.username
         t_user_id: int = user.id
-        await self.alarm_bot.send_message(CHAT_ID_ALARM,
+        await self.alarm_bot.send_message(CHAT_ID_ALARM_WITH_HR,
                                           f"""
            Пользователь изменил информацию о себе: {text} \n 
            user: {user_name}
