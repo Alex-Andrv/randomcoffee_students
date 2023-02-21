@@ -56,7 +56,7 @@ class BotLogger(logging.LoggerAdapter):
         user: User = User.get_current()
         user_name: str = user.username
         t_user_id: int = user.id
-        await self.alarm_bot.send_message(CHAT_ID_ALARM,
+        await self.alarm_bot.send_message(CHAT_ID_ALARM_WITH_HR,
                                           f"""
         Предложение от нашего замечательного пользователя: {text} \n 
         user: {user_name}
