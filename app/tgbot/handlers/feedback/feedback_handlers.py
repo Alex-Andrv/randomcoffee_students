@@ -38,7 +38,7 @@ async def feedback_start(callback: types.CallbackQuery):
 async def ask_for_feedback_test(message: types.Message):
     await FeedbackStates.basic_feedback.set()
     await logger.print_warning(f'user {User.get_current().id} using test-only feature "/test_feedback"')
-    return await message.answer(messages['7.1'].format(link='https://telegra.ph/Kommunikativnye-lajfhaki-11-07'),
+    return await message.answer(messages['7.1'].format(link='https://telegra.ph/Kommunikativnye-lajfhaki-02-22'),
                                 reply_markup=feedback_button,
                                 parse_mode='Markdown')
 
@@ -46,7 +46,7 @@ async def ask_for_feedback_test(message: types.Message):
 @logging_decorator
 async def ask_for_feedback(message: types.Message):
     await FeedbackStates.basic_feedback.set()
-    return await message.answer(messages['7.1'].format(link='https://telegra.ph/Kommunikativnye-lajfhaki-11-07'),
+    return await message.answer(messages['7.1'].format(link='https://telegra.ph/Kommunikativnye-lajfhaki-02-22'),
                                 reply_markup=feedback_button,
                                 parse_mode='Markdown')
 
