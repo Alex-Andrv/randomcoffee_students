@@ -223,7 +223,7 @@ async def ask_for_info(message: types.Message, bot_service: BotService):
                                     reply_markup=info_buttons)
     else:
         await RegistrationStates.user_info_typing.set()
-        return await message.answer(messages['3.11.1'])
+        return await message.answer(messages['3.11.1'], parse_mode="HTML")
 
 
 @logging_decorator
@@ -247,7 +247,7 @@ async def keep_info(callback: types.CallbackQuery, state: FSMContext, bot_servic
 @logging_decorator
 async def change_info(callback: types.CallbackQuery):
     await RegistrationStates.user_info_typing.set()
-    return await callback.message.answer(messages['3.11.2'])
+    return await callback.message.answer(messages['3.11.2'], parse_mode="HTML")
 
 
 # NOT A HANDLER;
