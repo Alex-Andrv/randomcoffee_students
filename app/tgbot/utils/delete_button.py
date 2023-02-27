@@ -1,5 +1,6 @@
 from aiogram import Bot
-from aiogram.utils.exceptions import MessageToEditNotFound, MessageNotModified, MessageToDeleteNotFound
+from aiogram.utils.exceptions import MessageToEditNotFound, MessageNotModified, MessageToDeleteNotFound, \
+    MessageCantBeDeleted
 from typeguard import check_type
 
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
@@ -29,6 +30,18 @@ async def delete_button_on_previous_message(bot: Bot, state_data: dict):
             await logger.print_error(str(MessageNotModified))
         except MessageToDeleteNotFound:
             await logger.print_error(str(MessageToDeleteNotFound))
+        except MessageCantBeDeleted:
+            await logger.print_error(str(MessageCantBeDeleted) + " " + "may be 48 hour 48 hours have passed")
+            if with_reply_markup:
+                try:
+                    await bot.edit_message_reply_markup(chat_id, previous_message_id)
+                except MessageToEditNotFound:
+                    await logger.print_error(str(MessageToEditNotFound))
+                    # Может быть валидным поведением, но пока пусть будет error
+                except MessageNotModified:
+                    await logger.print_error(str(MessageNotModified))
+                except MessageCantBeDeleted:
+                    await logger.print_error(str(MessageToDeleteNotFound))
 
     else:
         await logger.print_warning("previous_message is None")
