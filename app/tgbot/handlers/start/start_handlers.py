@@ -20,8 +20,9 @@ logging_decorator = logging_decorator_factory(logger)
 
 
 @logging_decorator
-async def start_chatting(message: types.Message):
+async def start_chatting(message: types.Message, bot_service: BotService):
     await StartStates.start.set()
+    await bot_service.add_visitor_if_not_exists(message.from_user.id)
     return await message.answer(messages['1.1'], reply_markup=start_chatting_button)
 
 
