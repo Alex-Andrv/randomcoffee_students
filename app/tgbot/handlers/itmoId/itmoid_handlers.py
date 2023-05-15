@@ -38,6 +38,7 @@ async def validate_oauth(callback: types.CallbackQuery, bot_service: BotService,
         user_builder.set_t_user_id(user_id)
         user_builder.set_email(isudata.email)
         user_builder.set_full_name(isudata.name)
+        user_builder.set_sex(isudata.gender)
         await set_attr_to_state(state, 'user_builder', user_builder.to_dict())
         return await ask_for_name(callback.message, bot_service, state)
     else:

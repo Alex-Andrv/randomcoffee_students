@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
+from app.tgbot.models.MyUser import Sex
+
 
 @dataclass(slots=True, frozen=True)
 class IsuData:
     t_user_id: int
     sub: str
-    gender: str
+    gender: Sex
     name: str
     isu: str | None
     preferred_username: str

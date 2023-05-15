@@ -2,6 +2,7 @@ from asyncpg import Connection, Record
 from typeguard import check_type
 
 from app.tgbot.models.IsuData import IsuData
+from app.tgbot.models.MyUser import Sex
 
 
 def _get_my_isudata(isudata: Record) -> IsuData | None:
@@ -21,7 +22,7 @@ def _get_my_isudata(isudata: Record) -> IsuData | None:
     return IsuData(
         t_user_id = isudata['t_user_id'],
         sub = isudata['sub'],
-        gender = isudata['gender'],
+        gender = Sex.MEN if isudata['gender'] == "male" else Sex.WOMEN,
         name = isudata['name'],
         isu = isudata.get('isu'),
         preferred_username = isudata['preferred_username'],

@@ -45,8 +45,14 @@ async def ask_for_name(message: types.Message, bot_service: BotService, state: F
         return await message.answer(messages['3.1.2'].format(name=my_user.full_name),
                                     reply_markup=name_buttons)
     else:
-        await RegistrationStates.set_full_name.set()
-        return await message.answer(messages['3.1.1'])
+        user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
+        if user_builder.full_name is not None:
+            await RegistrationStates.full_name.set()
+            return await message.answer(messages['3.1.2'].format(name=user_builder.full_name),
+                                    reply_markup=name_buttons)
+        else:
+            await RegistrationStates.set_full_name.set()
+            return await message.answer(messages['3.1.1'])
 
 
 @logging_decorator
@@ -62,12 +68,12 @@ async def set_full_name(message: types.Message, bot_service: BotService, state: 
     await logger.print_info(f'user: {User.get_current().id} set/change full name')
     await set_attr_to_state(state, 'user_builder', user_builder.to_dict())
     await message.answer(messages['3.2.3.0'].format(full_name=full_name))
-    return await ask_for_sex(message, bot_service)
+    return await ask_for_sex(message, bot_service, state)
 
 
 @logging_decorator
-async def keep_full_name(callback: types.CallbackQuery, bot_service: BotService):
-    return await ask_for_sex(callback.message, bot_service)
+async def keep_full_name(callback: types.CallbackQuery, bot_service: BotService, state: FSMContext):
+    return await ask_for_sex(callback.message, bot_service, state)
 
 
 @logging_decorator
@@ -78,7 +84,7 @@ async def change_full_name(callback: types.CallbackQuery):
 
 # NOT A HANDLER;
 @logging_decorator
-async def ask_for_sex(message: types.Message, bot_service: BotService):
+async def ask_for_sex(message: types.Message, bot_service: BotService, state: FSMContext):
     t_user_id = User.get_current().id
     my_user: MyUser = await bot_service.get_user_by_t_user_id(t_user_id)
     await logger.print_info(f'user {t_user_id} went to direction stage')
@@ -87,7 +93,13 @@ async def ask_for_sex(message: types.Message, bot_service: BotService):
         return await message.answer(messages['3.2.3.4'].format(sex=my_user.sex.value),
                                     reply_markup=had_sex_buttons)
     else:
-        return await show_sex_choices(message)
+        user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
+        if user_builder.sex is not None:
+            await RegistrationStates.user_sex.set()
+            return await message.answer(messages['3.2.3.4'].format(sex=user_builder.sex.value),
+                                        reply_markup=had_sex_buttons)
+        else:
+            return await show_sex_choices(message)
 
 
 @logging_decorator
