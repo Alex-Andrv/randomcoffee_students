@@ -2,6 +2,7 @@ from typing import Tuple, Union, Callable, List
 
 from app.tgbot.models.Feedback import Feedback
 from app.tgbot.models.WaitingCompanion import WaitingCompanion
+from app.tgbot.repositorys.confirm_isudata_repo import ConfirmIsudataRepo
 from app.tgbot.repositorys.meetings_repo import MeetingRepo
 from app.tgbot.repositorys.users_repo import UserRepo
 from app.tgbot.repositorys.visitor_repo import VisitorRepo
@@ -20,12 +21,13 @@ logging_decorator = logging_decorator_factory(logger)
 class BotService:
 
     def __init__(self, waiting_companion_repo: WaitingCompanionRepo, user_repo: UserRepo, meeting_repo: MeetingRepo,
-                 feedback_repo: FeedbackRepo, visitor_repo: VisitorRepo):
+                 feedback_repo: FeedbackRepo, visitor_repo: VisitorRepo, confirm_isudata_repo: ConfirmIsudataRepo):
         self.waiting_companion_repo = waiting_companion_repo
         self.user_repo = user_repo
         self.meeting_repo = meeting_repo
         self.feedback_repo = feedback_repo
         self.visitor_repo = visitor_repo
+        self.confirm_isudata_repo = confirm_isudata_repo
 
     @logging_decorator
     async def is_used_email(self, email: str):
@@ -148,3 +150,8 @@ class BotService:
     @logging_decorator
     async def add_visitor_if_not_exists(self, t_user_id):
         return await self.visitor_repo.insert_if_not_exists(t_user_id)
+
+    ####################################
+    @logging_decorator
+    async def get_isu_data(self, t_user_id: int):
+        return await self.confirm_isudata_repo.get_isu_data(t_user_id)

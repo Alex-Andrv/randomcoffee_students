@@ -70,3 +70,20 @@ create table if not exists feedbacks
     rating                smallint,
     cancellation_reason   text
 );
+
+create table isu_data
+(
+    sub                text    not null,
+    gender             text    not null,
+    name               text    not null,
+    isu                integer,
+    preferred_username text    not null,
+    given_name         text    not null,
+    middle_name        text,
+    family_name        text    not null,
+    email              text    not null,
+    email_verified     boolean not null,
+    t_user_id          bigint  not null
+        constraint isu_data_pk
+            primary key
+);

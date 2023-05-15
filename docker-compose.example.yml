@@ -33,3 +33,14 @@ services:
       - ./database/redis/config:/usr/local/etc/redis
       - ./database/redis/data:/data
     command: "redis-server /usr/local/etc/redis/redis.config --requirepass password"
+
+  site:
+    build: path_to_itmoffe_bot_site
+    restart: always
+    stop_signal: SIGINT
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+      - bot

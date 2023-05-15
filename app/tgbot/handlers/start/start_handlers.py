@@ -3,6 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from app.tgbot.handlers.email.email_handlers import ask_for_email
+from app.tgbot.handlers.itmoId.itmoid_handlers import offer_oauth
 from app.tgbot.handlers.ready.ready_handlers import ask_start_conversation
 from app.tgbot.handlers.start.start_keyboard import start_chatting_button
 from app.tgbot.services.BotService import BotService
@@ -32,4 +33,5 @@ async def want_participate(callback: types.CallbackQuery, bot_service: BotServic
     if await bot_service.is_user_registered(t_user_id):
         return await ask_start_conversation(callback.bot)
     else:
-        return await ask_for_email(callback)
+        # return await ask_for_email(callback)
+        return await offer_oauth(callback)

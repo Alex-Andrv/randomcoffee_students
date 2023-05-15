@@ -16,6 +16,7 @@ from app.tgbot.handlers.ban.ban_register import register_user_ban
 from app.tgbot.handlers.email.email_register import register_email
 from app.tgbot.handlers.error.error_handler import exception_handler
 from app.tgbot.handlers.feedback.feedback_register import register_feedback
+from app.tgbot.handlers.itmoId.itmoid_register import register_itmoid
 from app.tgbot.handlers.my_chat_member.my_chat_member_handler import stop_bot_event_handler
 from app.tgbot.handlers.ready.ready_register import register_ready
 from app.tgbot.handlers.registration.registration_register import register_registration
@@ -94,7 +95,8 @@ async def run():
     register_user_ban(dp)
     register_start(dp)
     register_user_have_not_username(dp)
-    register_email(dp)
+    # register_email(dp)
+    register_itmoid(dp)
     register_registration(dp)
     register_ready(dp)
     register_search(dp)

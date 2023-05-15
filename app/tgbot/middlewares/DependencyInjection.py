@@ -1,4 +1,6 @@
 from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
+
+from app.tgbot.repositorys.confirm_isudata_repo import ConfirmIsudataRepo
 from app.tgbot.repositorys.feedback_repo import FeedbackRepo
 from app.tgbot.repositorys.meetings_repo import MeetingRepo
 from app.tgbot.repositorys.users_repo import UserRepo
@@ -28,7 +30,14 @@ class DependencyInjection(LifetimeControllerMiddleware):
         feedback_repo = FeedbackRepo(db)
         meeting_repo = MeetingRepo(db)
         waiting_companion = WaitingCompanionRepo(db)
-        data['bot_service'] = BotService(waiting_companion, user_repo, meeting_repo, feedback_repo, visitor_repo)
+        confirm_isudata = ConfirmIsudataRepo(db)
+        data['bot_service'] = BotService(
+            waiting_companion,
+            user_repo,
+            meeting_repo,
+            feedback_repo,
+            visitor_repo,
+            confirm_isudata)
 
     async def post_process(self, obj, data, *args):
         del data["bot_service"]
