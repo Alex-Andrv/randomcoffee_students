@@ -241,8 +241,9 @@ async def ask_for_info(message: types.Message, bot_service: BotService):
 @logging_decorator
 async def read_info(message: types.Message, bot_service: BotService, state: FSMContext):
     user_info: str = message.text.strip()
-    if not await Validate.validate_text(user_info):
-        await message.answer(messages['3.11.1.1'])
+    msg = await Validate.take_reason_cancellation(user_info)
+    if msg is not None:
+        await message.answer(msg)
         return await ask_for_info(message, bot_service)
     user_builder: MyUserBuilder = MyUserBuilder.from_dict(await get_attr_from_state(state, 'user_builder'))
     check_type("user_builder", user_builder, MyUserBuilder)
@@ -288,4 +289,7 @@ async def exit_registration(bot: Bot, state: FSMContext, bot_service: BotService
                                direction=my_user.direction.value,
                                course=my_user.course.value,
                                info=my_user.user_info))
+
+    await bot.send_message("* Знакомства – это здорово, переходи по ссылке и получи баллы - * https://vk.cc/cqpf8c ", parse_mode='Markdown')
+
     return await ask_start_conversation(bot)
