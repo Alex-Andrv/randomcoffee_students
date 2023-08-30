@@ -291,5 +291,7 @@ async def exit_registration(bot: Bot, state: FSMContext, bot_service: BotService
                                info=my_user.user_info))
 
     await bot.send_message("* Знакомства – это здорово, переходи по ссылке и получи баллы - * https://vk.cc/cqpf8c ", parse_mode='Markdown')
+    await bot.send_message("* Attention * 2 сентября выйдет 2 версия бота, в которой мы исправили все ваши замечания. Заходите в бота 2 сентбря и расширяйте свой нетворкинг вместе с @itmoffe_bot ",
+                           parse_mode='Markdown')
 
     return await ask_start_conversation(bot)
