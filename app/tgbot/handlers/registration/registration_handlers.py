@@ -226,4 +226,7 @@ async def exit_registration(bot: Bot, state: FSMContext, bot_service: BotService
                                send_message,
                                parse_mode='Markdown')
     await logger.change_user_info(send_message)
+    await bot.send_message(my_user.t_user_id,
+                           "* Знакомства – это здорово, переходи по ссылке и получи баллы - * https://vk.cc/cqpf8c ",
+                           parse_mode='Markdown')
     return await ask_start_conversation(bot)
