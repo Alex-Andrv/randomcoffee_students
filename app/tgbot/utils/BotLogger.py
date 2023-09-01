@@ -75,7 +75,8 @@ class BotLogger(logging.LoggerAdapter):
            """)
 
     def __del__(self):
-        asyncio.run(self.alarm_bot.close())
+        pass
+        # asyncio.run(self.alarm_bot.close())
 
 
 def logging_decorator_factory(logger: BotLogger):
