@@ -19,6 +19,8 @@ def _get_my_isudata(isudata: Record) -> IsuData | None:
     check_type('family_name', isudata['family_name'], str)
     check_type('email', isudata['email'], str)
     check_type('email_verified', isudata['email_verified'], bool)
+    check_type('is_student', isudata['is_student'], bool)
+    check_type('is_worker', isudata['is_worker'], bool)
     return IsuData(
         t_user_id = isudata['t_user_id'],
         sub = isudata['sub'],
@@ -30,7 +32,9 @@ def _get_my_isudata(isudata: Record) -> IsuData | None:
         middle_name = isudata.get('middle_name'),
         family_name = isudata['family_name'],
         email = isudata['email'],
-        email_verified = isudata['email_verified']
+        email_verified = isudata['email_verified'],
+        is_student = isudata['is_student'],
+        is_worker = isudata['is_worker']
     )
 
 class ConfirmIsudataRepo:

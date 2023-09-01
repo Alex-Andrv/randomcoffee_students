@@ -5,7 +5,6 @@ from aiogram.types import User
 
 from app.tgbot.exseptions.exseptions import SMPTError
 from app.tgbot.handlers.email.email_keyboard import wait_email_buttons, retry_code_buttons
-from app.tgbot.handlers.registration.registration_handlers import ask_for_name
 from app.tgbot.models.MyUser import MyUserBuilder
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
@@ -87,7 +86,7 @@ async def read_code(message: types.Message, bot_service: BotService, state: FSMC
         await set_attr_to_state(state, 'user_builder', user_builder.to_dict())
         await logger.print_info(f'user {t_user_id} confirmed email')
         await message.answer(text=messages['2.7'])
-        return await ask_for_name(message, bot_service, state)
+        # return await ask_for_name(message, bot_service, state)
     else:
         # TODO add ban
         await logger.print_warning(

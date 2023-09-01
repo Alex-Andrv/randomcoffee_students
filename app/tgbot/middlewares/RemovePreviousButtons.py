@@ -1,7 +1,7 @@
 from aiogram import Dispatcher, Bot
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.middlewares import LifetimeControllerMiddleware
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery
 
 from app.tgbot.utils.BotLogger import BotLogger
 from app.tgbot.utils.delete_button import delete_button_on_previous_message
@@ -21,6 +21,11 @@ class RemovePreviousButtons(LifetimeControllerMiddleware):
         state: FSMContext = self.dispatcher.current_state()
         state_data: dict = await state.get_data()
         bot: Bot = obj.bot
+
+        if isinstance(obj, CallbackQuery):
+            if obj.data.startswith("skipp"):
+                return
+
         state_data = await delete_button_on_previous_message(bot, state_data)
         await state.set_data(state_data)
 
