@@ -30,6 +30,7 @@ class Validate:
             await logger.print_warning("message is too short")
             return f"Ожидается длина более 200 символов, ваше сообщение - {len(text)} символов"
 
+
         if len(text) > 1000:
             await logger.print_warning("user_info len is bigger than 1000")
             return f"Ожидается длина менее 1000 символов, ваше сообщение - {len(text)} символов"
@@ -55,4 +56,3 @@ class Validate:
             return False
 
         return True
-
