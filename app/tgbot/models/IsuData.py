@@ -16,4 +16,6 @@ class IsuData:
     family_name: str
     email: str
     email_verified: bool
+    is_student: bool
+    is_worker: bool
 

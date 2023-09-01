@@ -35,4 +35,4 @@ class Throttling(LifetimeControllerMiddleware):
             await dispatcher.throttle(key, rate=limit)
         except Throttled:
             await logger.print_info("User sent too many requests, sleep 4 second")
-            await asyncio.sleep(4)
+            await asyncio.sleep(2)

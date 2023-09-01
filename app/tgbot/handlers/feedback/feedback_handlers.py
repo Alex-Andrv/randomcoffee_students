@@ -11,7 +11,6 @@ from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
 from app.tgbot.utils.Validate import Validate
 from app.tgbot.utils.message_loader import messages
-from app.tgbot.utils.state_access_wrapper import get_attr_from_state
 
 
 class FeedbackStates(StatesGroup):
@@ -90,14 +89,13 @@ async def read_like(callback: types.CallbackQuery, state: FSMContext, bot_servic
     num_of_likes = int(callback.data[:1])
     await logger.print_dev(f'writing to db: {callback.data[:1]} likes')
 
-    meeting_id = await get_attr_from_state(state, 'meeting_id')
+    meeting_id: int = await bot_service.get_last_meeting_id_by_t_user_id(t_user_id)
     feedback_builder: FeedbackBuilder = FeedbackBuilder() \
         .set_rating(num_of_likes) \
         .set_t_user_id(t_user_id) \
         .set_is_meeting_took_place(True) \
         .set_meeting_id(meeting_id)
     await bot_service.add_feedback(feedback_builder.to_feedback())
-    await bot_service.add_meeting_by_waiting_id(meeting_id)
     await callback.message.answer(messages['7.10'])
     return await ask_start_conversation(callback.message.bot)
 
@@ -107,7 +105,7 @@ async def read_classified_problem(callback: types.CallbackQuery, state: FSMConte
     t_user_id = callback.from_user.id
     await logger.print_dev(f'writing to db: classified problem: {callback.data}')
 
-    meeting_id = await get_attr_from_state(state, 'meeting_id')
+    meeting_id: int = await bot_service.get_last_meeting_id_by_t_user_id(t_user_id)
     feedback_builder: FeedbackBuilder = FeedbackBuilder() \
         .set_cancellation_reason(callback.data) \
         .set_t_user_id(t_user_id) \
@@ -140,7 +138,7 @@ async def read_bot_problem(message: types.Message, state: FSMContext, bot_servic
 
     t_user_id = User.get_current().id
     await logger.print_dev(f'writing to db: bot problem: {message.text}')
-    meeting_id = await get_attr_from_state(state, 'meeting_id')
+    meeting_id: int = await bot_service.get_last_meeting_id_by_t_user_id(t_user_id)
     feedback_builder: FeedbackBuilder = FeedbackBuilder() \
         .set_cancellation_reason('(!) bot problem: ' + message.text) \
         .set_t_user_id(t_user_id) \
@@ -162,7 +160,7 @@ async def read_other_problem(message: types.Message, state: FSMContext, bot_serv
 
     t_user_id = User.get_current().id
     await logger.print_dev(f'writing to db: other problem: {message.text}')
-    meeting_id = await get_attr_from_state(state, 'meeting_id')
+    meeting_id: int = await bot_service.get_last_meeting_id_by_t_user_id(t_user_id)
     feedback_builder: FeedbackBuilder = FeedbackBuilder() \
         .set_cancellation_reason(message.text) \
         .set_t_user_id(t_user_id) \

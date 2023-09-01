@@ -1,65 +1,49 @@
+from typing import List
+
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
+from app.tgbot.models.Criterion import Interest, PreferredPlaces
 from app.tgbot.utils.message_loader import messages
-
-name_buttons = InlineKeyboardMarkup(row_width=1)
-name_buttons.add(InlineKeyboardButton(text=messages['3.2.3'], callback_data='keep_name'))
-name_buttons.add(InlineKeyboardButton(text=messages['3.2.1'], callback_data='change_name'))
-
-
-had_sex_buttons = InlineKeyboardMarkup(row_width=1)
-had_sex_buttons.add(InlineKeyboardButton(text=messages['3.2.3.6'], callback_data='keep_sex'))
-had_sex_buttons.add(InlineKeyboardButton(text=messages['3.2.3.5'], callback_data='change_sex'))
 
 sex_choice_buttons = InlineKeyboardMarkup(row_width=1)
 sex_choice_buttons.add(InlineKeyboardButton(text=messages['3.2.3.2'], callback_data=messages['3.2.3.2']))
 sex_choice_buttons.add(InlineKeyboardButton(text=messages['3.2.3.3'], callback_data=messages['3.2.3.3']))
 
 
-had_direction_buttons = InlineKeyboardMarkup(row_width=1)
-had_direction_buttons.add(InlineKeyboardButton(text=messages['3.6'], callback_data='keep_direction'))
-had_direction_buttons.add(InlineKeyboardButton(text=messages['3.6.1'], callback_data='change_direction'))
+def get_interactive_choice_markup(selected_choice: set, choices: list):
+    interactive_choice_buttons = InlineKeyboardMarkup(row_width=1)
+    selected = '✅'
+    choices = list(
+        map(lambda choice: (selected + choice if choice in selected_choice else choice, choice) , choices))
+    [interactive_choice_buttons.add(InlineKeyboardButton(text=choice, callback_data=f"skipp_{choice_calldata}"))
+     for choice, choice_calldata in
+     choices]
+    return interactive_choice_buttons
 
-direction_choice_buttons = InlineKeyboardMarkup(row_width=1)
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.1'], callback_data=messages['3.4.1']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.2'], callback_data=messages['3.4.2']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.3'], callback_data=messages['3.4.3']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.4'], callback_data=messages['3.4.4']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.5'], callback_data=messages['3.4.5']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.6'], callback_data=messages['3.4.6']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.7'], callback_data=messages['3.4.7']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.8'], callback_data=messages['3.4.8']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.9'], callback_data=messages['3.4.9']))
-direction_choice_buttons.add(InlineKeyboardButton(text=messages['3.4.10'], callback_data=messages['3.4.10']))
 
-course_choice_buttons = InlineKeyboardMarkup(row_width=1)
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.1'], callback_data=messages['3.7.3.1']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.2'], callback_data=messages['3.7.3.2']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.3'], callback_data=messages['3.7.3.3']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.4'], callback_data=messages['3.7.3.4']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.5'], callback_data=messages['3.7.3.5']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.6'], callback_data=messages['3.7.3.6']))
-course_choice_buttons.add(InlineKeyboardButton(text=messages['3.7.3.7'], callback_data=messages['3.7.3.7']))
+def get_interest_choice_markup(selected_interests: set[Interest]):
+    interests = [messages[f'3.8.2.{i}'] for i in range(1, 10)]
+    markup = get_interactive_choice_markup(selected_interests, interests)
+    markup.add(InlineKeyboardButton(text=messages[f'3.8.2.10'], callback_data="interest_further"))
+    return markup
 
-had_course_buttons = InlineKeyboardMarkup(row_width=1)
-had_course_buttons.add(InlineKeyboardButton(text=messages['3.7.4'], callback_data='keep_course'))
-had_course_buttons.add(InlineKeyboardButton(text=messages['3.7.5'], callback_data='change_course'))
 
-interest_choice_buttons = InlineKeyboardMarkup(row_width=1)
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.1'], callback_data=messages['3.8.2.1']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.2'], callback_data=messages['3.8.2.2']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.3'], callback_data=messages['3.8.2.3']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.4'], callback_data=messages['3.8.2.4']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.5'], callback_data=messages['3.8.2.5']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.6'], callback_data=messages['3.8.2.6']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.7'], callback_data=messages['3.8.2.7']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.8'], callback_data=messages['3.8.2.8']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.9'], callback_data=messages['3.8.2.9']))
-interest_choice_buttons.add(InlineKeyboardButton(text=messages['3.8.2.10'], callback_data=messages['3.8.2.10']))
+def get_preferred_places_markup(selected_preferred_places: set[PreferredPlaces]):
+    preferred_places = [messages[f'3.15.{i}'] for i in range(2, 9)]
+    markup = get_interactive_choice_markup(selected_preferred_places, preferred_places)
+    markup.add(InlineKeyboardButton(text=messages[f'3.15.9'], callback_data="interest_further"))
+    return markup
 
-had_interest_buttons = InlineKeyboardMarkup(row_width=1)
-had_interest_buttons.add(InlineKeyboardButton(text=messages['3.8.4'], callback_data='keep_interest'))
-had_interest_buttons.add(InlineKeyboardButton(text=messages['3.8.5'], callback_data='change_interest'))
+
+is_student_choice_buttons = InlineKeyboardMarkup(row_width=1)
+is_student_choice_buttons.add(InlineKeyboardButton(text=messages['3.13.1'], callback_data='is_student'))
+is_student_choice_buttons.add(InlineKeyboardButton(text=messages['3.13.2'], callback_data='is_worker'))
+
+meeting_format_choice_buttons = InlineKeyboardMarkup(row_width=1)
+meeting_format_choice_buttons.add(InlineKeyboardButton(text=messages['3.14.2'], callback_data=messages['3.14.2']))
+meeting_format_choice_buttons.add(InlineKeyboardButton(text=messages['3.14.3'], callback_data=messages['3.14.3']))
+meeting_format_choice_buttons.add(InlineKeyboardButton(text=messages['3.14.4'], callback_data=messages['3.14.4']))
+
 
 info_buttons = InlineKeyboardMarkup(row_width=1)
 info_buttons.add(InlineKeyboardButton(text=messages['3.10.2'], callback_data='keep_info'))

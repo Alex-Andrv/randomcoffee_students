@@ -23,5 +23,5 @@ async def stop_bot_event_handler(update: ChatMemberUpdated, bot_service: BotServ
         await storage.set_state(user=t_user_id)  # set state user to null
         await storage.set_data(user=t_user_id)  # set data user to null
         await logger.print_info(f"free user storage user = {t_user_id} ")
-        await bot_service.waiting_companion_repo.delete_request_for_t_user_id_with_null_status(t_user_id)
-        await logger.print_info(f"delete_request_for_t_user_id_with_null_status for 'kicked' user = {t_user_id}")
+        await bot_service.delete_user_from_queue(t_user_id)
+        await logger.print_info(f"delete_user_from_queue for 'kicked' user = {t_user_id}")
