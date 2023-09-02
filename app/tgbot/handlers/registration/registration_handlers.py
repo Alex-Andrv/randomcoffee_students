@@ -171,8 +171,8 @@ async def preferred_places_choice(callback: types.CallbackQuery, bot_service: Bo
     data = callback.data
     if data == "interest_further":
         if criterion_builder.meeting_format == MeetingFormat.OFFLINE and len(criterion_builder.preferred_places) == 0:
-            await callback.message.answer("Вы выбрали офлайн формат встречи, поэтому давайте выберем хотя бы одно место для встречи из предложенного списка. И помните, чем больше мест вы выберете, тем больше шансов на то, что мы найдем вам отличного собеседника! 😊🤝")
-            return await callback.message.answer(messages['3.15.11'],
+            await callback.message.answer(messages['3.15.11'])
+            return await callback.message.answer(messages['3.15.1'],
                                 reply_markup=get_preferred_places_markup(criterion_builder.preferred_places))
         else:
             return await exit_registration(callback.message.bot, state, bot_service)
