@@ -28,19 +28,4 @@ class MeetingRepo:
             'where f.t_user_id = $1 and s.t_user_id = $2 and f.t_user_id <> s.t_user_id',
             first_user_id, second_user_id)
 
-    def add_meeting(self, first_user_id: int, second_user_id: int, waiting_id: int):
-        assert first_user_id <= second_user_id
-
-        return self.conn.fetchval(
-            """with row as (
-                    INSERT INTO meetings (t_user_id, time, waiting_id) VALUES ($1, now(), $3) RETURNING id)
-                INSERT INTO meetings (id, t_user_id, time, waiting_id) (
-                SELECT id, $2, now(), $3
-                FROM row) RETURNING id;""",
-            first_user_id, second_user_id, waiting_id)
-
-    def get_by_meeting_id(self, meeting_id):
-        return self.conn.fetch(
-            'SELECT id, t_user_id, time '
-            'FROM meetings where id = $1', meeting_id)
 

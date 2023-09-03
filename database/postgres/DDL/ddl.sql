@@ -30,16 +30,15 @@ create unique index if not exists users_mail_uindex
 create unique index if not exists users_t_user_id_uindex
 	on users (t_user_id);
 
-
 create table if not exists meetings
 (
-    id            integer default nextval('meetings_id_seq'::regclass) not null
-        constraint meetings_pk
-            primary key,
-    t_user_id     bigint
+    id            integer default nextval('meetings_id_seq'::regclass) not null,
+    t_user_id     bigint    not null
         constraint meetings_users_t_user_id_fk
             references users,
-    time_matching timestamp
+    time_matching timestamp not null,
+    constraint meetings_pk
+        primary key (id, t_user_id)
 );
 
 create table if not exists waiting_companions
