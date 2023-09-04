@@ -2,7 +2,7 @@ import configparser
 
 VERSION = '0.0.1'
 
-BOT_INI_PATH = './app/configs/bot.ini'
+BOT_INI_PATH = './app/configs/bot_docker.ini'
 
 config = configparser.ConfigParser()
 config.read(BOT_INI_PATH)
