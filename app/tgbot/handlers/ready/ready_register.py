@@ -11,6 +11,11 @@ def register_ready(dp: Dispatcher):
         state=ReadyStates.add_to_queue)
 
     dp.register_callback_query_handler(
+        cancel_queue_and_edit_profile,
+        text='cancel_queue',
+        state=ReadyStates.add_to_queue)
+
+    dp.register_callback_query_handler(
         root_edit_profile,
         state=ReadyStates.edit_profile
     )
