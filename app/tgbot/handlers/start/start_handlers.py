@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from app.tgbot.handlers.itmoId.itmoid_handlers import offer_oauth
+from app.tgbot.handlers.ready.ready_start_conversation import start_conversation_new
 from app.tgbot.handlers.start.start_keyboard import start_chatting_button
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
