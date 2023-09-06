@@ -1,5 +1,3 @@
-from typing import List
-
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from app.tgbot.models.Criterion import Interest, PreferredPlaces

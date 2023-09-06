@@ -7,9 +7,13 @@ from app.tgbot.utils.message_loader import messages
 cancel_queue_buttons = InlineKeyboardMarkup()
 cancel_queue_buttons.add(InlineKeyboardButton(text=messages['4.13'], callback_data='cancel_queue'))
 
+edit_profile_buttons = InlineKeyboardMarkup()
+edit_profile_buttons.add(InlineKeyboardButton(text=messages['4.2'], callback_data='edit_profile'))
+
 start_conversation_buttons = InlineKeyboardMarkup()
 start_conversation_buttons.add(InlineKeyboardButton(text=messages['4.2'], callback_data='edit_profile'))
 start_conversation_buttons.add(InlineKeyboardButton(text=messages['4.3'], callback_data='start_conversation'))
+
 
 def get_edit_profile_keyboard(my_user: MyUser, criterion: Criterion):
     settings = [(messages["4.6"], "info"), (messages["4.8"], "interests"),

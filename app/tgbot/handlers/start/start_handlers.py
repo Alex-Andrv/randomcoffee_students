@@ -2,7 +2,6 @@ from aiogram import types
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from app.tgbot.handlers.itmoId.itmoid_handlers import offer_oauth
-from app.tgbot.handlers.ready.ready_handlers import ask_start_conversation
 from app.tgbot.handlers.start.start_keyboard import start_chatting_button
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
@@ -29,7 +28,7 @@ async def start_chatting(message: types.Message, bot_service: BotService):
 async def want_participate(callback: types.CallbackQuery, bot_service: BotService):
     t_user_id = callback.from_user.id
     if (await bot_service.is_user_registered(t_user_id)) and not (await bot_service.is_old_user(t_user_id)):
-        return await ask_start_conversation(callback.bot)
+        return await start_conversation_new(callback.bot, bot_service)
     else:
         # return await ask_for_email(callback)
         return await offer_oauth(callback)

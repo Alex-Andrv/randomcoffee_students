@@ -6,7 +6,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.types import User
 from typeguard import check_type
 
-from app.tgbot.handlers.ready.ready_handlers import ask_start_conversation
+from app.tgbot.handlers.ready.edit_handler import start_conversation_new
 from app.tgbot.handlers.registration.registration_keyboard import (
     is_student_choice_buttons, get_interest_choice_markup, meeting_format_choice_buttons, \
     get_preferred_places_markup, info_buttons)
@@ -103,7 +103,6 @@ async def keep_info(callback: types.CallbackQuery, state: FSMContext, bot_servic
 async def change_info(callback: types.CallbackQuery):
     await RegistrationStates.user_info_typing.set()
     return await callback.message.answer(messages['3.11.2'], parse_mode="HTML")
-
 
 
 #############################################################################
@@ -231,4 +230,4 @@ async def exit_registration(bot: Bot, state: FSMContext, bot_service: BotService
                                send_message,
                                parse_mode='Markdown')
     await logger.change_user_info(send_message)
-    return await ask_start_conversation(bot)
+    return await start_conversation_new(bot, bot_service)

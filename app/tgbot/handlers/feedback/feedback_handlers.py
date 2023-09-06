@@ -5,7 +5,7 @@ from aiogram.types import User
 
 from app.tgbot.handlers.feedback.feedback_keyboard import feedback_like_buttons, feedback_problem_buttons, \
     feedback_button, feedback_loose_buttons, feedback_forced_buttons
-from app.tgbot.handlers.ready.ready_handlers import ask_start_conversation
+from app.tgbot.handlers.ready.edit_handler import start_conversation_new
 from app.tgbot.models.Feedback import FeedbackBuilder
 from app.tgbot.services.BotService import BotService
 from app.tgbot.utils.BotLogger import BotLogger, logging_decorator_factory
@@ -97,7 +97,7 @@ async def read_like(callback: types.CallbackQuery, state: FSMContext, bot_servic
         .set_meeting_id(meeting_id)
     await bot_service.add_feedback(feedback_builder.to_feedback())
     await callback.message.answer(messages['7.10'])
-    return await ask_start_conversation(callback.message.bot)
+    return await start_conversation_new(callback.message.bot, bot_service)
 
 
 @logging_decorator
@@ -113,7 +113,7 @@ async def read_classified_problem(callback: types.CallbackQuery, state: FSMConte
         .set_meeting_id(meeting_id)
     await bot_service.add_feedback(feedback_builder.to_feedback())
     await callback.message.answer(messages['7.21'])
-    return await ask_start_conversation(callback.message.bot)
+    return await start_conversation_new(callback.message.bot, bot_service)
 
 
 @logging_decorator
@@ -147,7 +147,7 @@ async def read_bot_problem(message: types.Message, state: FSMContext, bot_servic
     await bot_service.add_feedback(feedback_builder.to_feedback())
 
     await message.answer(messages['7.21'])
-    return await ask_start_conversation(message.bot)
+    return await start_conversation_new(message.bot, bot_service)
 
 
 @logging_decorator
@@ -169,4 +169,4 @@ async def read_other_problem(message: types.Message, state: FSMContext, bot_serv
     await bot_service.add_feedback(feedback_builder.to_feedback())
 
     await message.answer(messages['7.21'])
-    return await ask_start_conversation(message.bot)
+    return await start_conversation_new(message.bot, bot_service)
